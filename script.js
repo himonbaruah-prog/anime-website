@@ -1,4 +1,5 @@
-const anime = [
+let apiAnime = [];
+let searchTimer;
  {id:1,title:"Attack on Titan",year:2013,type:"TV",episodes:87,rating:9.1,popularity:99,status:"Completed",genres:["Action","Drama","Fantasy"],symbol:"進",palette:"linear-gradient(145deg,#25384a,#7a4c45 55%,#171525)",description:"Humanity fights for survival behind enormous walls as the truth about the Titans slowly comes to light."},
  {id:2,title:"Demon Slayer",year:2019,type:"TV",episodes:55,rating:8.7,popularity:98,status:"Ongoing",genres:["Action","Fantasy"],symbol:"滅",palette:"linear-gradient(145deg,#1c5860,#b34d55 55%,#171525)",description:"A kind-hearted boy joins the Demon Slayer Corps after a demon attack changes his family forever."},
  {id:3,title:"One Piece",year:1999,type:"TV",episodes:1100,rating:9.0,popularity:100,status:"Ongoing",genres:["Action","Adventure","Comedy"],symbol:"海",palette:"linear-gradient(145deg,#174d72,#d38a46 55%,#241a39)",description:"A young pirate and his crew sail across a vast world in search of the legendary One Piece treasure."},
