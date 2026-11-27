@@ -231,6 +231,56 @@ async function loadNewReleases() {
     console.error(error);
   }
 }
+async function loadEpisodes(animeId) {
+  const list = $("#episode-list");
+  const status = $("#episode-status");
+
+  list.innerHTML = "";
+  status.textContent = "Loading episodes...";
+
+  const id = animeId.replace("kitsu-", "");
+
+  try {
+    const response = await fetch(
+      `${API}/anime/${id}/episodes?page[limit]=20&sort=number`
+    );
+
+    if (!response.ok) {
+      throw new Error("Episode information unavailable");
+    }
+
+    const data = await response.json();
+    const episodes = data.data || [];
+
+    if (!episodes.length) {
+      status.textContent = "Episode information is not available.";
+      return;
+    }
+
+    status.textContent =
+      `${episodes.length} episodes shown`;
+
+    list.innerHTML = episodes.map((episode, index) => {
+      const ep = episode.attributes || {};
+      const number = ep.number || index + 1;
+      const title = ep.canonicalTitle || "Episode " + number;
+      const date = ep.airdate || "Release date unavailable";
+
+      return `
+        <div class="episode-item">
+          <strong>Episode ${number}: ${escapeHTML(title)}</strong>
+          <span>${escapeHTML(date)}</span>
+        </div>
+      `;
+    }).join("");
+
+  } catch (error) {
+    status.textContent =
+      "Could not load episodes. Please try again.";
+
+    console.error(error);
+  }
+}
 function filtered() {
   let list = getAllAnime().filter(a => {
     const matchesGenre =
@@ -360,6 +410,7 @@ function openDetail(id) {
     `${a.year} · ${a.type} · ${a.episodes} episodes · ★ ${a.rating} · ${a.status}`;
 
   $("#detail-description").textContent = a.description;
+loadEpisodes(a.id);
 
   $("#detail-genres").innerHTML = a.genres.map(g =>
     `<span class="mini-tag">${escapeHTML(g)}</span>`
