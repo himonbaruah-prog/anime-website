@@ -326,16 +326,18 @@ document.addEventListener("click", e => {
   }
 });
 
-$("#clear-filters").addEventListener("click", () => {
-  activeGenre = "All";
-  query = "";
-  sortMode = "popular";
+const clearButton = $("#clear-filters");
 
-  $("#search").value = "";
-  $("#sort").value = "default";
-
-  loadAnime("");
-});
+if (clearButton) {
+  clearButton.addEventListener("click", () => {
+    activeGenre = "All";
+    query = "";
+    sortMode = "popular";
+    $("#search").value = "";
+    $("#sort").value = "default";
+    loadAnime("");
+  });
+}
 
 $("#modal-close").addEventListener("click", () => {
   $("#modal").classList.remove("show");
