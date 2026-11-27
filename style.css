@@ -761,3 +761,35 @@ button {
         padding: 50px 5%;
     }
 }
+/* AniVerse Theme Fix */
+
+html, body {
+    background-color: #0b0918 !important;
+    color: #f5f2ff !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+}
+
+h1, h2, h3, h4, p, a, span, label {
+    color: inherit;
+}
+
+.hero h1,
+.section-heading h2,
+.logo,
+.filter-section h3 {
+    color: #f5f2ff !important;
+}
+
+.eyebrow {
+    color: #c2a8ff !important;
+}
+
+.hero-content > p:not(.eyebrow),
+.section-heading > p {
+    color: #aaa3bd !important;
+}
+
+.hero-button {
+    background: #9b72ff !important;
+    color: #ffffff !important;
+}
