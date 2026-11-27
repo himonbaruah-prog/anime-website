@@ -579,3 +579,117 @@ button {
         height: 260px;
     }
 }
+
+/* Live Anime Cards */
+
+#api-status {
+    color: var(--primary-light);
+    font-size: 13px;
+    margin: 12px 0 20px;
+}
+
+.anime-poster {
+    height: 255px;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-light);
+    cursor: pointer;
+}
+
+.anime-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: 0.3s;
+}
+
+.anime-card:hover .anime-poster img {
+    transform: scale(1.04);
+}
+
+.poster-type {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.75);
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 11px;
+}
+
+.poster-fallback {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--primary-light);
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.save-btn {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    font-size: 19px;
+    z-index: 2;
+}
+
+.anime-card-content {
+    padding: 14px;
+}
+
+.anime-card-content h3 {
+    font-size: 14px;
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+
+.anime-card-content p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.detail-cover {
+    background-size: cover;
+    background-position: center;
+}
+
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.detail-actions a {
+    display: inline-block;
+    background: var(--surface-light);
+    color: var(--primary-light);
+    padding: 10px 15px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.detail-actions a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+@media (max-width: 700px) {
+    .anime-poster {
+        height: 210px;
+    }
+
+    .anime-card-content {
+        padding: 10px;
+    }
+}
