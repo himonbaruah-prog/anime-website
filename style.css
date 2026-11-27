@@ -718,3 +718,29 @@ button {
         padding: 10px;
     }
 }
+/* Upcoming Anime Section */
+
+.upcoming-section {
+    padding: 65px 7%;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+}
+
+.upcoming-section .section-heading {
+    margin-bottom: 25px;
+}
+
+#upcoming-grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+@media (max-width: 700px) {
+    .upcoming-section {
+        padding: 50px 5%;
+    }
+
+    #upcoming-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px;
+    }
+}
