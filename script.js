@@ -11,6 +11,21 @@ let searchTimer;
 let requestNumber = 0;
 
 const $ = selector => document.querySelector(selector);
+const statusElement = document.createElement("p");
+statusElement.id = "api-status";
+$("#results-count").after(statusElement);
+
+const detailActions = document.createElement("div");
+detailActions.className = "detail-actions";
+detailActions.innerHTML = `
+  <a id="trailer-link" target="_blank" rel="noopener">
+    Watch Trailer
+  </a>
+  <a id="legal-link" target="_blank" rel="noopener">
+    Find Legal Streaming
+  </a>
+`;
+$("#detail-save").before(detailActions);
 
 function escapeHTML(value = "") {
   return String(value).replace(/[&<>"']/g, char => ({
