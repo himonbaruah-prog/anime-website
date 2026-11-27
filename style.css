@@ -853,3 +853,42 @@ h1, h2, h3, h4, p, a, span, label {
         width: 110px;
     }
 }
+/* Anime Episode List */
+
+.episodes-section {
+    margin: 25px 0;
+}
+
+.episodes-section h3 {
+    color: #f5f2ff;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+#episode-status {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.episode-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px;
+    margin-bottom: 9px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.episode-item strong {
+    color: #f5f2ff;
+    font-size: 14px;
+}
+
+.episode-item span {
+    color: var(--muted);
+    font-size: 12px;
+}
