@@ -83,7 +83,7 @@ function filtered(){
 
 function card(a){
  return `<article class="anime-card" data-open="${a.id}">
- <div class="poster" style="--poster:${a.palette}" data-symbol="${a.symbol}">
+ ${a.image ? `<img src="${a.image}" alt="${a.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">` : ""}
  <span class="poster-top">${a.type} · ${a.year}</span>
  <button class="save-btn ${saved.includes(a.id)?"saved":""}" data-save="${a.id}">
  ${saved.includes(a.id)?"♥":"＋"}
