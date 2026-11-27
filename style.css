@@ -793,3 +793,63 @@ h1, h2, h3, h4, p, a, span, label {
     background: #9b72ff !important;
     color: #ffffff !important;
 }
+/* Top Search Bar */
+
+.top-search {
+    position: sticky;
+    top: 75px;
+    z-index: 90;
+    display: flex;
+    gap: 10px;
+    padding: 12px 7%;
+    background: #151128;
+    border-bottom: 1px solid var(--border);
+}
+
+.top-search input,
+.top-search select {
+    background: #211a3b;
+    color: #f5f2ff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.top-search input {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-search select {
+    width: 135px;
+}
+
+/* Swipe Categories */
+
+#filter-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding: 8px 2px 15px;
+    margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+#filter-chips button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .top-search {
+        top: 70px;
+        padding: 10px 5%;
+    }
+
+    .top-search select {
+        width: 110px;
+    }
+}
