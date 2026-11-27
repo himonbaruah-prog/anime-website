@@ -86,39 +86,75 @@ async function loadAnime(term = "") {
     : "Loading anime collection...";
 
   try {
+    let results = [];
+
     const params = new URLSearchParams();
     params.set("page[limit]", "20");
-    params.set("include", "genres");
 
     if (term) {
       params.set("filter[text]", term);
     } else {
       params.set("sort", "-userCount");
+      params.set("include", "genres");
     }
 
-    const response = await fetch(`${API}/anime?${params}`, {
-      headers: {
-        Accept: "application/vnd.api+json"
-      }
-    });
+    const response = await fetch(`${API}/anime?${params}`);
 
     if (!response.ok) {
-      throw new Error("Anime server is not responding.");
+      throw new Error("Kitsu search failed");
     }
 
     const data = await response.json();
 
     if (currentRequest !== requestNumber) return;
 
-    const included = data.included || [];
-
-    apiAnime = (data.data || []).map(item =>
-      mapAnime(item, included)
+    results = (data.data || []).map(item =>
+      mapAnime(item, data.included || [])
     );
-if (!term) {
-  trendingAnime = apiAnime.slice(0, 8);
-  renderTrending();
-}
+
+    // Fallback search using Jikan API
+    if (term && results.length === 0) {
+      status.textContent = "Trying another anime database...";
+
+      const fallbackResponse = await fetch(
+        `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(term)}&limit=20`
+      );
+
+      if (!fallbackResponse.ok) {
+        throw new Error("Search failed");
+      }
+
+      const fallbackData = await fallbackResponse.json();
+
+      if (currentRequest !== requestNumber) return;
+
+      results = (fallbackData.data || []).map(item => ({
+        id: "jikan-" + item.mal_id,
+        title: item.title || "Unknown Anime",
+        year: item.year || (
+          item.aired?.from
+            ? item.aired.from.slice(0, 4)
+            : "N/A"
+        ),
+        type: item.type || "Anime",
+        episodes: item.episodes || "?",
+        rating: item.score || "N/A",
+        status: item.status || "Unknown",
+        description: item.synopsis || "No description available.",
+        image: item.images?.jpg?.large_image_url || "",
+        genres: (item.genres || []).map(g => g.name),
+        trailer: item.trailer?.youtube_id || "",
+        link: item.url || ""
+      }));
+    }
+
+    apiAnime = results;
+
+    if (!term) {
+      trendingAnime = apiAnime.slice(0, 8);
+      renderTrending();
+    }
+
     status.textContent = `${apiAnime.length} anime found`;
     render();
 
@@ -126,7 +162,7 @@ if (!term) {
     if (currentRequest !== requestNumber) return;
 
     status.textContent =
-      "Anime load failed. Please check your internet and try again.";
+      "Search failed. Please check your internet and try again.";
 
     console.error(error);
     apiAnime = [];
