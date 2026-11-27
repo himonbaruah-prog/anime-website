@@ -20,7 +20,19 @@
 
         <button id="mobile-menu" class="mobile-menu" aria-label="Open menu">☰</button>
     </header>
-
+      <div class="top-search">
+        <input
+            type="search"
+            id="search"
+            placeholder="Search anime by name..."
+        >
+        <select id="sort">
+            <option value="default">Sort: Default</option>
+            <option value="az">Name: A to Z</option>
+            <option value="za">Name: Z to A</option>
+            <option value="rating">Highest Rated</option>
+        </select>
+    </div>
     <main>
         <section class="hero" id="home">
             <div class="hero-content">
@@ -75,20 +87,7 @@
                 <p id="results-count">Discover something amazing</p>
             </div>
 
-            <div class="search-area">
-                <input
-                    type="search"
-                    id="search"
-                    placeholder="Search anime by name..."
-                >
-
-                <select id="sort">
-                    <option value="default">Sort: Default</option>
-                    <option value="az">Name: A to Z</option>
-                    <option value="za">Name: Z to A</option>
-                    <option value="rating">Highest Rated</option>
-                </select>
-            </div>
+            
 
             <div class="filter-section">
                 <h3>Genres</h3>
