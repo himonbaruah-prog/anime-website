@@ -4,6 +4,7 @@ let anime = [];
 let apiAnime = [];
 let trendingAnime = [];
 let upcomingAnime = [];
+let newReleases = [];
 let saved = JSON.parse(localStorage.getItem("aniverse-watchlist") || "[]");
 let activeGenre = "All";
 let query = "";
@@ -134,7 +135,13 @@ if (!term) {
 }
 
 function getAllAnime() {
-  return [...anime, ...apiAnime, ...trendingAnime];
+  return [
+    ...anime,
+    ...apiAnime,
+    ...trendingAnime,
+    ...upcomingAnime,
+    ...newReleases
+  ];
 }
 
 
@@ -192,6 +199,38 @@ function renderUpcoming() {
       })).join("")
     : "<p>No upcoming anime available.</p>";
 } 
+async function loadNewReleases() {
+  const grid = $("#new-releases-grid");
+
+  grid.innerHTML = "<p>Loading new anime...</p>";
+
+  try {
+    const params = new URLSearchParams();
+    params.set("page[limit]", "12");
+    params.set("filter[status]", "current");
+    params.set("sort", "-startDate");
+
+    const response = await fetch(`${API}/anime?${params}`);
+
+    if (!response.ok) {
+      throw new Error("Unable to load new releases");
+    }
+
+    const data = await response.json();
+
+    newReleases = (data.data || []).map(item =>
+      mapAnime(item)
+    );
+
+    grid.innerHTML = newReleases.length
+      ? newReleases.map(card).join("")
+      : "<p>No new releases available.</p>";
+
+  } catch (error) {
+    grid.innerHTML = "<p>New anime could not be loaded.</p>";
+    console.error(error);
+  }
+}
 function filtered() {
   let list = getAllAnime().filter(a => {
     const matchesGenre =
@@ -431,3 +470,4 @@ saveList();
 
 loadAnime("");
 loadUpcoming();
+loadNewReleases();
