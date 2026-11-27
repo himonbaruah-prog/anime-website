@@ -52,16 +52,33 @@ function renderGenres(){
 }
 
 function filtered(){
- let list=anime.filter(a=>
+ let allAnime = [...anime, ...apiAnime];
+
+ let list=allAnime.filter(a=>
  (activeGenre==="All"||a.genres.includes(activeGenre))&&
  (`${a.title} ${a.genres.join(" ")}`.toLowerCase().includes(query))
  );
 
- if(sortMode==="rating")list.sort((a,b)=>b.rating-a.rating);
+ function filtered(){
+ let allAnime = [...anime, ...apiAnime];
+
+ let list=allAnime.filter(a=>
+ (activeGenre==="All"||a.genres.includes(activeGenre))&&
+ (`${a.title} ${a.genres.join(" ")}`.toLowerCase().includes(query))
+ );
+
+function filtered(){
+ let allAnime = [...anime, ...apiAnime];
+
+ let list=allAnime.filter(a=>
+ (activeGenre==="All"||a.genres.includes(activeGenre))&&
+ (`${a.title} ${a.genres.join(" ")}`.toLowerCase().includes(query))
+ ); if(sortMode==="rating")list.sort((a,b)=>b.rating-a.rating);
  else if(sortMode==="az")list.sort((a,b)=>a.title.localeCompare(b.title));
  else list.sort((a,b)=>b.popularity-a.popularity);
 
  return list;
+}
 }
 
 function card(a){
