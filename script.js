@@ -2,6 +2,7 @@ const API = "https://kitsu.io/api/edge";
 
 let anime = [];
 let apiAnime = [];
+let trendingAnime = [];
 let saved = JSON.parse(localStorage.getItem("aniverse-watchlist") || "[]");
 let activeGenre = "All";
 let query = "";
@@ -129,7 +130,48 @@ async function loadAnime(term = "") {
 }
 
 function getAllAnime() {
-  return [...anime, ...apiAnime];
+  return [...anime, ...apiAnime, ...trendingAnime];
+}
+async function loadTrending() {
+  const grid = $("#trending-grid");
+
+  grid.innerHTML = "<p>Loading trending anime...</p>";
+
+  try {
+    const params = new URLSearchParams();
+    params.set("page[limit]", "8");
+    params.set("sort", "-userCount");
+    params.set("include", "genres");
+
+    const response = await fetch(`${API}/anime?${params}`);
+
+    if (!response.ok) {
+      throw new Error("Unable to load trending anime");
+    }
+
+    const data = await response.json();
+    const included = data.included || [];
+
+    trendingAnime = (data.data || []).map(item =>
+      mapAnime(item, included)
+    );
+
+    renderTrending();
+
+  } catch (error) {
+    grid.innerHTML = "<p>Trending anime could not be loaded.</p>";
+    console.error(error);
+  }
+}
+
+function renderTrending() {
+  const grid = $("#trending-grid");
+
+  if (!grid) return;
+
+  grid.innerHTML = trendingAnime.length
+    ? trendingAnime.map(card).join("")
+    : "<p>No trending anime available.</p>";
 }
 
 function filtered() {
@@ -370,3 +412,4 @@ document.addEventListener("keydown", e => {
 saveList();
 
 loadAnime("");
+loadTrending();
