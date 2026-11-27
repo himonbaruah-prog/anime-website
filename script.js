@@ -154,14 +154,18 @@ $("#sort").addEventListener("change",e=>{
  render();
 });
 
-$("#clear-filters").addEventListener("click",()=>{
- activeGenre="All";
- query="";
- $("#search").value="";
- sortMode="popular";
- $("#sort").value="popular";
- render();
-});
+const clearFilters = $("#clear-filters");
+
+if (clearFilters) {
+  clearFilters.addEventListener("click", () => {
+    activeGenre = "All";
+    query = "";
+    $("#search").value = "";
+    sortMode = "popular";
+    $("#sort").value = "default";
+    render();
+  });
+}
 
 $("#modal-close").addEventListener("click",()=>$("#modal").hidden=true);
 
