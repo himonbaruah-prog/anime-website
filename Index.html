@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniVerse - Anime Discovery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="#" class="logo">Ani<span>Verse</span></a>
+
+        <nav class="main-nav">
+            <a href="#home">Home</a>
+            <a href="#explore">Explore</a>
+            <a href="#watchlist">My Watchlist</a>
+        </nav>
+
+        <button class="mobile-menu" aria-label="Open menu">☰</button>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR ANIME UNIVERSE</p>
+                <h1>Discover Your Next <span>Adventure.</span></h1>
+                <p>
+                    Explore amazing anime, discover new stories
+                    and build your personal watchlist.
+                </p>
+                <a href="#explore" class="hero-button">Explore Anime</a>
+            </div>
+        </section>
+
+        <section class="explore-section" id="explore">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">FIND YOUR NEXT FAVORITE</p>
+                    <h2>Explore Anime</h2>
+                </div>
+                <p id="results-count">Discover something amazing</p>
+            </div>
+
+            <div class="search-area">
+                <input
+                    type="search"
+                    id="search"
+                    placeholder="Search anime by name..."
+                >
+
+                <select id="sort">
+                    <option value="default">Sort: Default</option>
+                    <option value="az">Name: A to Z</option>
+                    <option value="za">Name: Z to A</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
+
+            <div class="filter-section">
+                <h3>Genres</h3>
+                <div id="genre-grid" class="genre-grid"></div>
+            </div>
+
+            <div id="filter-chips" class="filter-chips"></div>
+
+            <div class="anime-grid" id="anime-grid"></div>
+        </section>
+
+        <section class="watchlist-section" id="watchlist">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR PERSONAL COLLECTION</p>
+                    <h2>My Watchlist</h2>
+                </div>
+                <span id="list-count">0 Saved</span>
+            </div>
+
+            <div id="watch-empty" class="empty-state">
+                <h3>Your watchlist is empty</h3>
+                <p>Save your favourite anime and find them here.</p>
+            </div>
+
+            <div id="watch-grid" class="anime-grid"></div>
+        </section>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close" aria-label="Close">
+                &times;
+            </button>
+
+            <div id="detail-cover" class="detail-cover"></div>
+
+            <div class="detail-content">
+                <h2 id="detail-title"></h2>
+                <p id="detail-meta" class="detail-meta"></p>
+                <p id="detail-description"></p>
+                <div id="detail-genres" class="detail-genres"></div>
+
+                <button id="detail-save" class="save-button">
+                    Add to Watchlist
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <a href="#" class="logo">Ani<span>Verse</span></a>
+        <p>Your world of anime discovery.</p>
+        <p>© 2026 AniVerse. Made for anime fans.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
