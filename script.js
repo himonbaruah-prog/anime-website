@@ -113,7 +113,10 @@ async function loadAnime(term = "") {
     apiAnime = (data.data || []).map(item =>
       mapAnime(item, included)
     );
-
+if (!term) {
+  trendingAnime = apiAnime.slice(0, 8);
+  renderTrending();
+}
     status.textContent = `${apiAnime.length} anime found`;
     render();
 
@@ -132,37 +135,7 @@ async function loadAnime(term = "") {
 function getAllAnime() {
   return [...anime, ...apiAnime, ...trendingAnime];
 }
-async function loadTrending() {
-  const grid = $("#trending-grid");
 
-  grid.innerHTML = "<p>Loading trending anime...</p>";
-
-  try {
-    const params = new URLSearchParams();
-    params.set("page[limit]", "8");
-    params.set("sort", "-userCount");
-    params.set("include", "genres");
-
-    const response = await fetch(`${API}/anime?${params}`);
-
-    if (!response.ok) {
-      throw new Error("Unable to load trending anime");
-    }
-
-    const data = await response.json();
-    const included = data.included || [];
-
-    trendingAnime = (data.data || []).map(item =>
-      mapAnime(item, included)
-    );
-
-    renderTrending();
-
-  } catch (error) {
-    grid.innerHTML = "<p>Trending anime could not be loaded.</p>";
-    console.error(error);
-  }
-}
 
 function renderTrending() {
   const grid = $("#trending-grid");
@@ -412,4 +385,3 @@ document.addEventListener("keydown", e => {
 saveList();
 
 loadAnime("");
-loadTrending();
