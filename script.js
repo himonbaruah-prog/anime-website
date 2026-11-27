@@ -3,6 +3,7 @@ const API = "https://kitsu.io/api/edge";
 let anime = [];
 let apiAnime = [];
 let trendingAnime = [];
+let upcomingAnime = [];
 let saved = JSON.parse(localStorage.getItem("aniverse-watchlist") || "[]");
 let activeGenre = "All";
 let query = "";
@@ -146,7 +147,51 @@ function renderTrending() {
     ? trendingAnime.map(card).join("")
     : "<p>No trending anime available.</p>";
 }
+async function loadUpcoming() {
+  const grid = $("#upcoming-grid");
 
+  grid.innerHTML = "<p>Loading upcoming anime...</p>";
+
+  try {
+    const params = new URLSearchParams();
+    params.set("page[limit]", "12");
+    params.set("filter[status]", "upcoming");
+    params.set("sort", "startDate");
+
+    const response = await fetch(`${API}/anime?${params}`);
+
+    if (!response.ok) {
+      throw new Error("Unable to load upcoming anime");
+    }
+
+    const data = await response.json();
+
+    upcomingAnime = (data.data || []).map(item =>
+      mapAnime(item)
+    );
+
+    renderUpcoming();
+
+  } catch (error) {
+    grid.innerHTML = "<p>Upcoming anime could not be loaded.</p>";
+    console.error(error);
+  }
+}
+
+function renderUpcoming() {
+  const grid = $("#upcoming-grid");
+
+  if (!grid) return;
+
+  grid.innerHTML = upcomingAnime.length
+    ? upcomingAnime.map(a => card({
+        ...a,
+        year: a.year === "N/A"
+          ? "Release date TBA"
+          : "Release: " + a.year
+      })).join("")
+    : "<p>No upcoming anime available.</p>";
+} 
 function filtered() {
   let list = getAllAnime().filter(a => {
     const matchesGenre =
@@ -385,3 +430,4 @@ document.addEventListener("keydown", e => {
 saveList();
 
 loadAnime("");
+loadUpcoming();
