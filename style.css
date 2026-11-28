@@ -1090,3 +1090,119 @@ h1, h2, h3, h4, p, a, span, label {
         padding-bottom: 50px;
     }
 }
+
+
+/* AniVerse polish update */
+.top-search {
+    position: sticky;
+    top: 75px;
+    z-index: 90;
+    align-items: center;
+    max-width: 100%;
+}
+
+.top-search input,
+.top-search select {
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.top-search input {
+    flex: 1;
+}
+
+.top-search input:focus,
+.top-search select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(155, 114, 255, 0.14);
+}
+
+.trending-section,
+.new-releases-section,
+.upcoming-section {
+    scroll-margin-top: 145px;
+}
+
+.anime-card {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.anime-poster {
+    background: linear-gradient(145deg, #211a3b, #120e22);
+}
+
+.poster-type {
+    color: #fff;
+    backdrop-filter: blur(8px);
+}
+
+.save-btn {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.save-btn:hover {
+    background: var(--primary);
+    transform: scale(1.08);
+}
+
+.episode-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    margin-top: 9px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.025);
+    font-size: 13px;
+}
+
+.episode-item span {
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+#api-status {
+    min-height: 20px;
+}
+
+.empty-state[hidden] {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .top-search {
+        top: 65px;
+        padding: 10px 5%;
+        gap: 8px;
+    }
+
+    .top-search input,
+    .top-search select {
+        padding: 11px 10px;
+        font-size: 12px;
+    }
+
+    .top-search select {
+        max-width: 118px;
+    }
+
+    .hero::after {
+        right: -5%;
+        opacity: 0.65;
+    }
+
+    .section-heading h2 {
+        font-size: 25px;
+    }
+
+    .episode-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
