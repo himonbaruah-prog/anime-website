@@ -703,3 +703,39 @@ $("#remove-video").addEventListener("click", () => {
 
 $("#browse-legal").href = "https://www.justwatch.com/in";
 refreshVideoLibrary();
+
+// Small discovery shortcuts for a smoother browsing experience.
+$("#surprise-me")?.addEventListener("click", () => {
+  const collection = getAllAnime();
+  if (!collection.length) {
+    $("#api-status").textContent = "Loading anime before choosing a surprise...";
+    loadAnime("");
+    return;
+  }
+  const pick = collection[Math.floor(Math.random() * collection.length)];
+  openDetail(pick.id);
+});
+
+const backToTop = document.createElement("button");
+backToTop.type = "button";
+backToTop.className = "back-to-top";
+backToTop.textContent = "↑";
+backToTop.setAttribute("aria-label", "Back to top");
+backToTop.title = "Back to top";
+document.body.append(backToTop);
+
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+window.addEventListener("scroll", () => {
+  backToTop.classList.toggle("visible", window.scrollY > 500);
+}, { passive: true });
+
+document.addEventListener("keydown", event => {
+  if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+  const target = event.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable) return;
+  event.preventDefault();
+  $("#search")?.focus();
+});
