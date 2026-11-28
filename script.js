@@ -206,6 +206,7 @@ async function loadUpcoming() {
     params.set("page[limit]", "12");
     params.set("filter[status]", "upcoming");
     params.set("sort", "startDate");
+    params.set("include", "genres");
 
     const response = await fetch(`${API}/anime?${params}`);
 
@@ -251,6 +252,7 @@ async function loadNewReleases() {
     params.set("page[limit]", "12");
     params.set("filter[status]", "current");
     params.set("sort", "-startDate");
+    params.set("include", "genres");
 
     const response = await fetch(`${API}/anime?${params}`);
 
@@ -551,11 +553,13 @@ $("#detail-save").addEventListener("click", () => {
 });
 
 $("#mobile-menu").addEventListener("click", () => {
-  $(".main-nav").classList.toggle("open");
+  const isOpen = $(".main-nav").classList.toggle("open");
+  $("#mobile-menu").setAttribute("aria-expanded", String(isOpen));
 });
 
 $(".main-nav").addEventListener("click", () => {
   $(".main-nav").classList.remove("open");
+  $("#mobile-menu").setAttribute("aria-expanded", "false");
 });
 
 document.addEventListener("keydown", e => {
