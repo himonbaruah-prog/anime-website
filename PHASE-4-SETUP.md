@@ -1,38 +1,64 @@
 # AniVerse — Phase 4 streaming setup
 
-This repository now contains the Phase 4 streaming integration code. The public GitHub Pages site is still a static frontend; the API must be deployed separately before cloud uploads and the online catalogue work.
+The API code is prepared, and the Supabase database schema is separate from Cloudflare Stream. The public GitHub Pages site is a static frontend; the Node API must be deployed separately.
 
-## Services required
+## Current setup status
 
-1. Cloudflare Stream account and API token with Stream read/write permission.
-2. Supabase project.
-3. Node.js hosting for this API (for example Render, Railway, or another Node host).
+- Supabase project and `videos` table: configure/verify in your Supabase dashboard.
+- Node API: ready to deploy from this repository.
+- Cloudflare Stream: not active until Stream is enabled on your Cloudflare account and its API credentials are added.
+- GitHub Pages frontend: remains available for discovery and local-device video playback.
 
-## Supabase
+## 1. Supabase
 
-Open the Supabase SQL Editor and run the contents of `supabase-schema.sql`. Keep the service-role key private; it belongs only in the backend environment variables.
+The project URL is:
 
-## Cloudflare Stream
+`https://schxgambhcvriorhslpw.supabase.co`
 
-Create an API token with permission to manage Stream for the correct account. Find the account ID and Stream customer subdomain in the Cloudflare Stream dashboard.
+In Supabase, open **SQL Editor** and run `supabase-schema.sql` once if the `videos` table has not already been created. In **Table Editor**, confirm that `public.videos` exists.
 
-## Deploy the API
+Copy the project's **service role / secret key** from the API keys area. Never put it in frontend code, GitHub, screenshots, or chat. It belongs only in the API host's private environment variables.
 
-1. Create a new Node web service from this GitHub repository.
-2. Set the root directory to the repository root and the start command to `npm start`.
-3. Add every variable from `.env.example` in the hosting dashboard. Set `CORS_ORIGIN` to `https://himonbaruah-prog.github.io`.
-4. Do not commit a real `.env` file or expose the Supabase service-role key / Cloudflare API token in browser code.
-5. Copy the deployed API base URL (for example `https://your-api-host.example`) into `streaming.js` as `API_BASE`.
+## 2. Deploy the API on Render
 
-## Admin upload
+1. Sign in to Render and choose **New → Web Service**.
+2. Connect the GitHub repository `himonbaruah-prog/anime-website`.
+3. Use the repository root as the root directory.
+4. Build command: `npm install`
+5. Start command: `npm start`
+6. Select a plan that suits your budget. A free instance, if currently offered to your account, may sleep when idle; the first request can take longer.
+7. Add these environment variables in Render's **Environment** section:
+   - `SUPABASE_URL` = `https://schxgambhcvriorhslpw.supabase.co`
+   - `SUPABASE_SERVICE_ROLE_KEY` = your private Supabase service-role/secret key
+   - `CORS_ORIGIN` = `https://himonbaruah-prog.github.io`
+   - `ADMIN_UPLOAD_KEY` = a long, unique password generated for AniVerse
+   - `CF_ACCOUNT_ID`, `CF_API_TOKEN`, `CF_CUSTOMER_SUBDOMAIN` only after Cloudflare Stream is enabled.
+8. Deploy. Copy the service URL Render gives you.
 
-Open AniVerse, go to Watch, enter the admin upload key, choose an episode title and video file, and upload. The browser sends the file directly to Cloudflare using a one-time upload URL. When Cloudflare finishes processing, press Publish (or retry Publish after processing). Published episodes appear in the online library.
+The API can serve the online video catalogue with Supabase configured, even while Cloudflare Stream is not configured. Upload endpoints stay disabled until all Cloudflare and admin settings are present.
 
-The admin key is a simple first-stage gate, not a complete user-account system. For a public commercial service, replace it with proper admin authentication, signed playback URLs, audit logs, abuse protection, backups, and legal content licensing.
+## 3. Connect the frontend
+
+After Render deploys successfully, open `streaming.js` in GitHub and replace:
+
+`https://YOUR-ANIVERSE-API-URL`
+
+with your real Render service URL (no trailing slash). Save the change. The site can then request the online catalogue.
+
+## 4. Enable Cloudflare Stream later
+
+Only continue if you choose to pay for Cloudflare Stream. Create a Cloudflare API token with the minimum Stream permissions needed to create and read videos. Add the account ID, token, and customer subdomain as private Render environment variables. Never add the token to GitHub or the browser.
+
+## 5. Upload and publish
+
+Once Cloudflare Stream is configured, open AniVerse → Watch → Admin: upload a licensed episode. Enter the private admin upload key, title, and video file. After processing finishes, press **Publish after processing**.
+
+Upload only videos you own or have explicit permission to distribute. Before opening uploads to the public, add proper admin accounts, signed/private playback where needed, audit logs, abuse controls, backups, and legal content licensing.
 
 ## Important
 
-- Upload only videos you own or are explicitly licensed to distribute.
-- Cloudflare Stream usage is billed according to its current storage/delivery pricing. Check the provider's pricing before inviting viewers.
-- GitHub Pages cannot run the Node API. The frontend and API are deployed separately.
-- The local-device video library remains available as a separate feature.
+- GitHub Pages cannot run the Node API.
+- Do not send passwords, service-role keys, or Cloudflare API tokens in this chat.
+- The API's single admin key is an MVP gate, not a complete account system.
+- Check provider pricing before enabling paid video storage and delivery.
+- The local-device video library is separate and does not upload files to a public server.
