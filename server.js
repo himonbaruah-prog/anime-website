@@ -3,36 +3,43 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { timingSafeEqual } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
-const required = [
-  "ADMIN_UPLOAD_KEY", "CF_ACCOUNT_ID", "CF_API_TOKEN",
-  "CF_CUSTOMER_SUBDOMAIN", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"
-];
-const missing = required.filter(key => !process.env[key]);
-const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseReady = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+const cloudflareReady = Boolean(process.env.CF_ACCOUNT_ID && process.env.CF_API_TOKEN && process.env.CF_CUSTOMER_SUBDOMAIN);
+const adminReady = Boolean(process.env.ADMIN_UPLOAD_KEY);
+const supabase = supabaseReady
   ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
   : null;
 
+app.disable("x-powered-by");
 app.use(helmet());
 app.use(cors({
-  origin: (process.env.CORS_ORIGIN || "https://himonbaruah-prog.github.io").split(","),
+  origin: (process.env.CORS_ORIGIN || "https://himonbaruah-prog.github.io").split(",").map(value => value.trim()),
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "X-Admin-Key"]
 }));
 app.use(express.json({ limit: "30kb" }));
-app.use("/api/admin", rateLimit({ windowMs: 15 * 60 * 1000, limit: 20 }));
+app.use("/api", rateLimit({ windowMs: 15 * 60 * 1000, limit: 120 }));
+app.use("/api/admin", rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: true, legacyHeaders: false }));
 
-function configCheck(_req, res, next) {
-  if (missing.length) return res.status(503).json({ error: "Server setup is incomplete", missing });
+function requireSupabase(_req, res, next) {
+  if (!supabaseReady) return res.status(503).json({ error: "Database connection is not configured yet." });
+  next();
+}
+function requireStreamingSetup(_req, res, next) {
+  if (!supabaseReady || !cloudflareReady || !adminReady) {
+    return res.status(503).json({ error: "Video upload is not configured yet. The database, Cloudflare Stream and admin key must all be configured." });
+  }
   next();
 }
 function requireAdmin(req, res, next) {
-  const supplied = req.get("X-Admin-Key") || "";
-  if (!process.env.ADMIN_UPLOAD_KEY || supplied.length !== process.env.ADMIN_UPLOAD_KEY.length ||
-      supplied !== process.env.ADMIN_UPLOAD_KEY) {
+  const expected = Buffer.from(process.env.ADMIN_UPLOAD_KEY || "");
+  const supplied = Buffer.from(req.get("X-Admin-Key") || "");
+  if (!expected.length || expected.length !== supplied.length || !timingSafeEqual(expected, supplied)) {
     return res.status(401).json({ error: "Admin key is invalid" });
   }
   next();
@@ -54,10 +61,15 @@ async function cloudflare(path, options = {}) {
 }
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "AniVerse streaming API", configured: missing.length === 0 });
+  res.json({
+    ok: true,
+    service: "AniVerse streaming API",
+    databaseConfigured: supabaseReady,
+    cloudStreamingConfigured: cloudflareReady && adminReady
+  });
 });
 
-app.get("/api/videos", configCheck, async (_req, res) => {
+app.get("/api/videos", requireSupabase, async (_req, res) => {
   const { data, error } = await supabase.from("videos")
     .select("id,title,description,playback_url,thumbnail_url,duration_seconds,created_at")
     .eq("status", "ready").order("created_at", { ascending: false });
@@ -65,7 +77,7 @@ app.get("/api/videos", configCheck, async (_req, res) => {
   res.json({ videos: data || [] });
 });
 
-app.post("/api/admin/upload-url", configCheck, requireAdmin, async (req, res) => {
+app.post("/api/admin/upload-url", requireStreamingSetup, requireAdmin, async (req, res) => {
   const title = String(req.body.title || "").trim().slice(0, 120);
   const description = String(req.body.description || "").trim().slice(0, 1000);
   if (!title) return res.status(400).json({ error: "Episode title is required" });
@@ -84,7 +96,7 @@ app.post("/api/admin/upload-url", configCheck, requireAdmin, async (req, res) =>
   }
 });
 
-app.post("/api/admin/publish", configCheck, requireAdmin, async (req, res) => {
+app.post("/api/admin/publish", requireStreamingSetup, requireAdmin, async (req, res) => {
   const uid = String(req.body.uid || "").trim();
   const title = String(req.body.title || "").trim().slice(0, 120);
   const description = String(req.body.description || "").trim().slice(0, 1000);
@@ -112,5 +124,7 @@ app.post("/api/admin/publish", configCheck, requireAdmin, async (req, res) => {
 
 app.listen(port, () => {
   console.log(`AniVerse API listening on port ${port}`);
-  if (missing.length) console.warn("Missing environment variables:", missing.join(", "));
+  if (!supabaseReady) console.warn("Database environment variables are not configured.");
+  if (!cloudflareReady) console.warn("Cloudflare Stream environment variables are not configured.");
+  if (!adminReady) console.warn("Admin upload key is not configured.");
 });
