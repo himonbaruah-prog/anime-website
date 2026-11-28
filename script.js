@@ -90,12 +90,12 @@ async function loadAnime(term = "") {
 
     const params = new URLSearchParams();
     params.set("page[limit]", "20");
+    params.set("include", "genres");
 
     if (term) {
       params.set("filter[text]", term);
     } else {
       params.set("sort", "-userCount");
-      params.set("include", "genres");
     }
 
     const response = await fetch(`${API}/anime?${params}`);
@@ -171,13 +171,19 @@ async function loadAnime(term = "") {
 }
 
 function getAllAnime() {
-  return [
-    ...anime,
+  const unique = new Map();
+
+  [
     ...apiAnime,
     ...trendingAnime,
+    ...newReleases,
     ...upcomingAnime,
-    ...newReleases
-  ];
+    ...anime
+  ].forEach(item => {
+    if (item && item.id) unique.set(item.id, item);
+  });
+
+  return [...unique.values()];
 }
 
 
@@ -273,6 +279,11 @@ async function loadEpisodes(animeId) {
 
   list.innerHTML = "";
   status.textContent = "Loading episodes...";
+
+  if (!animeId.startsWith("kitsu-")) {
+    status.textContent = "Episode information is not available for this result.";
+    return;
+  }
 
   const id = animeId.replace("kitsu-", "");
 
