@@ -20,6 +20,7 @@
         <a class="nav-link" href="#explore"><span class="nav-icon">◈</span> Discover</a>
         <a class="nav-link" href="#trending"><span class="nav-icon">↗</span> Trending</a>
         <a class="nav-link" href="#watchlist"><span class="nav-icon">♡</span> My List</a>
+        <a class="nav-link" href="#watch"><span class="nav-icon">▶</span> Watch</a>
       </nav>
       <div class="header-right">
         <span class="live-indicator"><i></i> ANIME DISCOVERY</span>
@@ -112,6 +113,39 @@
         <div id="watch-grid" class="anime-grid"></div>
       </section>
     </main>
+
+
+      <section class="content-section watch-section" id="watch">
+        <div class="section-heading">
+          <div><p class="eyebrow">YOUR PERSONAL PLAYER</p><h2>Watch <span>anime</span></h2><p class="section-subtitle">Play your own video files or find an official streaming service.</p></div>
+          <span class="section-note">PERSONAL VIDEO LIBRARY</span>
+        </div>
+        <div class="watch-layout">
+          <div class="player-panel">
+            <video id="local-player" controls playsinline preload="metadata">
+              Your browser does not support HTML video.
+            </video>
+            <div class="player-caption">
+              <div><strong id="player-title">Choose an episode to start watching</strong><p id="player-subtitle">Your uploaded videos stay in this browser on this device.</p></div>
+              <button id="remove-video" class="remove-video" type="button" hidden>Remove video</button>
+            </div>
+          </div>
+          <aside class="upload-panel">
+            <div class="upload-icon">＋</div>
+            <h3>Add your own episodes</h3>
+            <p>Select a video file from your phone. MP4 and WebM are recommended.</p>
+            <label class="upload-button" for="video-upload">Choose video file</label>
+            <input id="video-upload" type="file" accept="video/*" hidden>
+            <p class="upload-note">Files are saved locally in this browser using device storage. They are not uploaded to a public server.</p>
+          </aside>
+        </div>
+        <div class="library-heading"><div><h3>Your video library</h3><p>Episodes you have added on this device</p></div><span id="video-count" class="count-pill">0 VIDEOS</span></div>
+        <div id="video-library" class="video-library"><p class="library-empty">No videos added yet. Choose a video file to build your library.</p></div>
+        <div class="legal-stream-panel">
+          <div><p class="eyebrow">OFFICIAL STREAMING OPTIONS</p><h3>Find where to watch anime</h3><p>Check licensed platforms available in your region. Availability depends on the title and country.</p></div>
+          <a id="browse-legal" class="primary-button" href="https://www.justwatch.com/in" target="_blank" rel="noopener">Browse legal services ↗</a>
+        </div>
+      </section>
 
     <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
       <div class="modal-content">
