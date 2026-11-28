@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: aniverse-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: SUPABASE_URL
+        value: https://schxgambhcvriorhslpw.supabase.co
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: ADMIN_UPLOAD_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://himonbaruah-prog.github.io
+      - key: CF_ACCOUNT_ID
+        sync: false
+      - key: CF_API_TOKEN
+        sync: false
+      - key: CF_CUSTOMER_SUBDOMAIN
+        sync: false
