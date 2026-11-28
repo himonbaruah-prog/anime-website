@@ -1,154 +1,140 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AniVerse - Anime Discovery</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b12">
+  <meta name="description" content="AniVerse is your personal space to discover anime, explore new releases and build your watchlist.">
+  <title>AniVerse — Your Anime Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+  <div class="app-shell">
     <header class="site-header">
-        <a href="#" class="logo">Ani<span>Verse</span></a>
-
-        <nav class="main-nav">
-            <a href="#home">Home</a>
-            <a href="#explore">Explore</a>
-            <a href="#watchlist">My Watchlist</a>
-        </nav>
-
-        <button id="mobile-menu" class="mobile-menu" aria-label="Open menu">☰</button>
+      <a href="#home" class="logo" aria-label="AniVerse home"><span class="logo-mark">A</span><span>Ani<span class="logo-accent">Verse</span></span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#home"><span class="nav-icon">⌂</span> Home</a>
+        <a class="nav-link" href="#explore"><span class="nav-icon">◈</span> Discover</a>
+        <a class="nav-link" href="#trending"><span class="nav-icon">↗</span> Trending</a>
+        <a class="nav-link" href="#watchlist"><span class="nav-icon">♡</span> My List</a>
+      </nav>
+      <div class="header-right">
+        <span class="live-indicator"><i></i> ANIME DISCOVERY</span>
+        <button id="mobile-menu" class="mobile-menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      </div>
     </header>
-      <div class="top-search">
-        <input
-            type="search"
-            id="search"
-            placeholder="Search anime by name..."
-        >
-        <select id="sort">
-            <option value="default">Sort: Default</option>
-            <option value="az">Name: A to Z</option>
-            <option value="za">Name: Z to A</option>
-            <option value="rating">Highest Rated</option>
-        </select>
+
+    <div class="top-search">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input type="search" id="search" placeholder="Search anime, genres, or your next obsession..." autocomplete="off" aria-label="Search anime">
+      <kbd>SEARCH</kbd>
+      <select id="sort" aria-label="Sort anime">
+        <option value="default">Recommended</option>
+        <option value="rating">Top rated</option>
+        <option value="az">Name: A–Z</option>
+        <option value="za">Name: Z–A</option>
+      </select>
     </div>
+
     <main>
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <p class="eyebrow">YOUR ANIME UNIVERSE</p>
-                <h1>Discover Your Next <span>Adventure.</span></h1>
-                <p>
-                    Explore amazing anime, discover new stories
-                    and build your personal watchlist.
-                </p>
-                <a href="#explore" class="hero-button">Explore Anime</a>
-            </div>
-        </section>
-             <section class="trending-section" id="trending">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">POPULAR RIGHT NOW</p>
-                    <h2>Trending Anime</h2>
-                </div>
-                <p>Discover popular anime</p>
-            </div>
+      <section class="hero" id="home">
+        <div class="hero-glow"></div>
+        <div class="hero-copy">
+          <div class="hero-kicker"><span class="kicker-line"></span> YOUR NEXT WORLD AWAITS</div>
+          <h1>Find your next<br><span>anime obsession.</span></h1>
+          <p>Explore unforgettable stories, discover what's trending, and keep every favourite in one place.</p>
+          <div class="hero-actions">
+            <a href="#trending" class="primary-button">Explore anime <span>↗</span></a>
+            <a href="#watchlist" class="text-button">Open my watchlist <span>→</span></a>
+          </div>
+          <div class="hero-footnote"><span class="sparkle">✦</span> A universe made for anime fans</div>
+        </div>
+        <div class="hero-art" id="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="art-core"><span>アニメ</span><b>ANIVERSE</b></div>
+          <div class="art-caption"><span class="caption-dot"></span> DISCOVER SOMETHING EXTRAORDINARY</div>
+        </div>
+        <div class="hero-bottom-line"><span>01</span><span class="line"></span><span>DISCOVER • SAVE • REPEAT</span></div>
+      </section>
 
-            <div class="anime-grid" id="trending-grid"></div>
-        </section> 
-            <section class="new-releases-section" id="new-releases">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">LATEST ANIME</p>
-                    <h2>New Releases</h2>
-                </div>
-                <p>Recently released anime</p>
-            </div>
+      <section class="quick-stats" aria-label="AniVerse features">
+        <div class="stat-item"><span class="stat-icon">✦</span><div><strong>Discover</strong><small>Find your next favourite</small></div></div>
+        <div class="stat-item"><span class="stat-icon">◷</span><div><strong>Stay updated</strong><small>New and upcoming anime</small></div></div>
+        <div class="stat-item"><span class="stat-icon">♡</span><div><strong>Your collection</strong><small>Keep your watchlist close</small></div></div>
+      </section>
 
-            <div class="anime-grid" id="new-releases-grid"></div>
-        </section>
-           <section class="upcoming-section" id="upcoming">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">COMING SOON</p>
-                    <h2>Upcoming Anime</h2>
-                </div>
-                <p>What's coming next</p>
-            </div>
+      <section class="content-section trending-section" id="trending">
+        <div class="section-heading">
+          <div><p class="eyebrow">THE COMMUNITY IS WATCHING</p><h2>Trending <span>now</span></h2><p class="section-subtitle">Popular picks making waves across the anime world.</p></div>
+          <a class="section-link" href="#explore">Explore all <span>→</span></a>
+        </div>
+        <div class="anime-grid" id="trending-grid"></div>
+      </section>
 
-            <div class="anime-grid" id="upcoming-grid"></div>
-        </section>
-        <section class="explore-section" id="explore">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">FIND YOUR NEXT FAVORITE</p>
-                    <h2>Explore Anime</h2>
-                </div>
-                <p id="results-count">Discover something amazing</p>
-            </div>
+      <section class="content-section new-releases-section" id="new-releases">
+        <div class="section-heading">
+          <div><p class="eyebrow">FRESH FROM THE SCREEN</p><h2>New <span>releases</span></h2><p class="section-subtitle">Catch up with the latest anime currently airing.</p></div>
+          <span class="section-note">UPDATED COLLECTION</span>
+        </div>
+        <div class="anime-grid" id="new-releases-grid"></div>
+      </section>
 
-            
+      <section class="content-section upcoming-section" id="upcoming">
+        <div class="section-heading">
+          <div><p class="eyebrow">ON THE HORIZON</p><h2>Coming <span>soon</span></h2><p class="section-subtitle">Keep an eye on the stories arriving next.</p></div>
+          <span class="section-note">UP NEXT</span>
+        </div>
+        <div class="anime-grid" id="upcoming-grid"></div>
+      </section>
 
-            <div class="filter-section">
-                <h3>Genres</h3>
-                <div id="genre-grid" class="genre-grid"></div>
-            </div>
+      <section class="content-section explore-section" id="explore">
+        <div class="section-heading">
+          <div><p class="eyebrow">YOUR PERSONAL DISCOVERY FEED</p><h2>Explore the <span>universe</span></h2><p class="section-subtitle">Browse the collection and filter by your mood.</p></div>
+          <p id="results-count">Discover something amazing</p>
+        </div>
+        <div class="filter-panel">
+          <div class="filter-title"><span class="filter-symbol">⌘</span><div><strong>Find your vibe</strong><small>Choose a genre to refine your collection</small></div></div>
+          <div id="genre-grid" class="genre-grid"></div>
+          <div id="filter-chips" class="filter-chips"></div>
+        </div>
+        <div class="anime-grid" id="anime-grid"></div>
+      </section>
 
-            <div id="filter-chips" class="filter-chips"></div>
-
-            <div class="anime-grid" id="anime-grid"></div>
-        </section>
-
-        <section class="watchlist-section" id="watchlist">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">YOUR PERSONAL COLLECTION</p>
-                    <h2>My Watchlist</h2>
-                </div>
-                <span id="list-count">0 Saved</span>
-            </div>
-
-            <div id="watch-empty" class="empty-state">
-                <h3>Your watchlist is empty</h3>
-                <p>Save your favourite anime and find them here.</p>
-            </div>
-
-            <div id="watch-grid" class="anime-grid"></div>
-        </section>
+      <section class="content-section watchlist-section" id="watchlist">
+        <div class="section-heading">
+          <div><p class="eyebrow">YOUR PRIVATE COLLECTION</p><h2>My <span>watchlist</span></h2><p class="section-subtitle">All the anime you want to come back to.</p></div>
+          <span id="list-count" class="count-pill">0 SAVED</span>
+        </div>
+        <div id="watch-empty" class="empty-state"><div class="empty-icon">♡</div><h3>Your list is waiting for a story.</h3><p>Tap the heart on any anime poster and it will be saved here.</p><a href="#explore" class="text-button">Discover anime <span>→</span></a></div>
+        <div id="watch-grid" class="anime-grid"></div>
+      </section>
     </main>
 
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button id="modal-close" class="modal-close" aria-label="Close">
-                &times;
-            </button>
-
-            <div id="detail-cover" class="detail-cover"></div>
-
-            <div class="detail-content">
-                <h2 id="detail-title"></h2>
-                <p id="detail-meta" class="detail-meta"></p>
-                <p id="detail-description"></p>
-                <div id="detail-genres" class="detail-genres"></div>
-<div class="episodes-section">
-    <h3>Episodes</h3>
-    <p id="episode-status">Loading episodes...</p>
-    <div id="episode-list"></div>
-</div>
-                <button id="detail-save" class="save-button">
-                    Add to Watchlist
-                </button>
-            </div>
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <div class="modal-content">
+        <button id="modal-close" class="modal-close" aria-label="Close details">×</button>
+        <div id="detail-cover" class="detail-cover"></div>
+        <div class="detail-content">
+          <p class="eyebrow">ANIME DETAILS</p>
+          <h2 id="detail-title"></h2>
+          <p id="detail-meta" class="detail-meta"></p>
+          <p id="detail-description"></p>
+          <div id="detail-genres" class="detail-genres"></div>
+          <div class="episodes-section"><div class="episode-heading"><h3>Episodes</h3><span class="section-note">EPISODE GUIDE</span></div><p id="episode-status">Loading episodes...</p><div id="episode-list"></div></div>
+          <button id="detail-save" class="save-button">Add to Watchlist</button>
         </div>
+      </div>
     </div>
 
     <footer class="site-footer">
-        <a href="#" class="logo">Ani<span>Verse</span></a>
-        <p>Your world of anime discovery.</p>
-        <p>© 2026 AniVerse. Made for anime fans.</p>
+      <a href="#home" class="logo"><span class="logo-mark">A</span><span>Ani<span class="logo-accent">Verse</span></span></a>
+      <p>Your space to discover, collect, and celebrate anime.</p>
+      <div class="footer-bottom"><span>© 2026 AniVerse</span><span>MADE FOR ANIME FANS <b>✦</b></span></div>
     </footer>
-
-    <script src="script.js"></script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
-  
