@@ -212,3 +212,42 @@ button { cursor:pointer; }
 }
 @media (max-width:360px) { .live-indicator { display:none; } .hero-actions { gap:15px; } .primary-button { padding:12px 14px; } .anime-poster { height:170px; } }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+
+/* Streaming and personal video library */
+.watch-section { background:linear-gradient(180deg,#0c111c,#0a0e17); }
+.watch-layout { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(230px,.8fr); gap:18px; align-items:stretch; }
+.player-panel,.upload-panel { min-width:0; border:1px solid var(--line); border-radius:16px; background:#111724; overflow:hidden; }
+#local-player { display:block; width:100%; aspect-ratio:16/9; max-height:560px; background:#05070b; object-fit:contain; }
+.player-caption { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px 17px; }
+.player-caption strong { font:600 14px 'Outfit',sans-serif; }
+.player-caption p,.upload-panel p,.library-heading p,.legal-stream-panel p { color:var(--muted); font-size:10px; margin-top:4px; }
+.remove-video,.delete-local { border:1px solid rgba(255,255,255,.12); border-radius:8px; background:#20283a; color:#d9ddec; padding:8px 10px; font-size:10px; }
+.upload-panel { padding:24px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; }
+.upload-icon { width:43px; height:43px; display:grid; place-items:center; border-radius:13px; background:rgba(167,139,250,.13); color:var(--accent); font-size:24px; margin-bottom:15px; }
+.upload-panel h3,.library-heading h3,.legal-stream-panel h3 { font:650 19px 'Outfit',sans-serif; }
+.upload-panel > p { line-height:1.7; margin:9px 0 17px; }
+.upload-button { display:inline-flex; padding:11px 15px; border-radius:9px; background:linear-gradient(110deg,#b7a0ff,#8b70e9); color:#110d1c; font-size:11px; font-weight:800; cursor:pointer; }
+.upload-panel .upload-note { margin:14px 0 0; color:#788398; font-size:9px; }
+.library-heading { display:flex; align-items:center; justify-content:space-between; margin:28px 0 13px; }
+.video-library { display:grid; gap:9px; }
+.video-library-item { display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--line); border-radius:11px; background:#111724; min-width:0; }
+.video-file-icon { width:36px; height:36px; flex:0 0 auto; display:grid; place-items:center; border-radius:10px; background:rgba(117,217,232,.1); color:var(--cyan); }
+.video-file-info { min-width:0; flex:1; }
+.video-file-info strong,.video-file-info small { display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.video-file-info strong { font-size:11px; }
+.video-file-info small { color:var(--muted); font-size:9px; margin-top:3px; }
+.play-local { border:0; border-radius:8px; padding:8px 12px; background:rgba(167,139,250,.17); color:#d7caff; font-size:10px; font-weight:800; }
+.library-empty { padding:20px; border:1px dashed rgba(255,255,255,.13); border-radius:11px; color:var(--muted); font-size:11px; text-align:center; }
+.legal-stream-panel { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:28px; padding:22px; border:1px solid rgba(167,139,250,.2); border-radius:14px; background:linear-gradient(110deg,rgba(167,139,250,.1),rgba(117,217,232,.04)); }
+.legal-stream-panel p { max-width:540px; line-height:1.6; }
+.legal-stream-panel .primary-button { flex:0 0 auto; }
+@media(max-width:700px) {
+  .watch-layout { grid-template-columns:1fr; }
+  .upload-panel { padding:19px; }
+  .player-caption { padding:12px; }
+  .player-caption strong { font-size:12px; }
+  .legal-stream-panel { align-items:flex-start; flex-direction:column; padding:17px; }
+  .video-library-item { gap:8px; padding:9px; }
+  .video-file-info strong { font-size:10px; }
+  .play-local,.delete-local { padding:7px 9px; }
+}
