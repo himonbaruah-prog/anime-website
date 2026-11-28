@@ -323,3 +323,34 @@ button { cursor:pointer; }
 @media(max-width:700px) {
   .cloud-health-status { width: 100%; margin: 0 0 12px; }
 }
+
+/* Discovery shortcut and back-to-top control */
+.surprise-button { border: 0; background: transparent; }
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 150;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(167,139,250,.35);
+  border-radius: 14px;
+  background: rgba(20,25,39,.92);
+  color: #d8ccff;
+  font-size: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity .2s, transform .2s, visibility .2s;
+}
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.back-to-top:hover { background: var(--accent-2); color: #fff; }
+@media(max-width:700px) {
+  .back-to-top { right: 14px; bottom: 14px; width: 40px; height: 40px; }
+  .surprise-button { padding-left: 0; }
+}
