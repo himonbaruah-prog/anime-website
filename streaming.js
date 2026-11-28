@@ -181,3 +181,36 @@ document.querySelector("#refresh-cloud-videos")?.addEventListener("click", loadC
 document.querySelector("#stream-upload-button")?.addEventListener("click", uploadCloudEpisode);
 document.querySelector("#stream-publish-button")?.addEventListener("click", publishCloudEpisode);
 loadCloudVideos();
+
+// Show the real backend configuration state without exposing any secrets.
+const cloudHealthStatus = document.createElement("p");
+cloudHealthStatus.className = "cloud-health-status";
+cloudHealthStatus.setAttribute("role", "status");
+cloudHealthStatus.setAttribute("aria-live", "polite");
+document.querySelector(".cloud-stream-heading")?.append(cloudHealthStatus);
+
+async function checkCloudHealth() {
+  if (!cloudHealthStatus || !apiReady()) return;
+  cloudHealthStatus.textContent = "Checking streaming service...";
+  cloudHealthStatus.dataset.state = "loading";
+  try {
+    const response = await fetch(API_BASE + "/api/health", { cache: "no-store" });
+    if (!response.ok) throw new Error("Health check failed");
+    const health = await response.json();
+    if (!health.ok) throw new Error("API is not ready");
+    const database = health.databaseConfigured
+      ? "Database connected"
+      : "Database setup required";
+    const streaming = health.cloudStreamingConfigured
+      ? "Cloud upload ready"
+      : "Cloud upload setup required";
+    cloudHealthStatus.textContent = database + " · " + streaming;
+    cloudHealthStatus.dataset.state =
+      health.databaseConfigured && health.cloudStreamingConfigured ? "ready" : "warning";
+  } catch (error) {
+    cloudHealthStatus.textContent = "Streaming service is temporarily unreachable. Please refresh in a moment.";
+    cloudHealthStatus.dataset.state = "error";
+  }
+}
+
+checkCloudHealth();
