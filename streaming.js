@@ -1,6 +1,6 @@
 // Phase 4: Cloudflare Stream + backend catalogue integration.
 // Set this to the deployed Node API URL before enabling cloud streaming.
-const API_BASE = "https://YOUR-ANIVERSE-API-URL";
+const API_BASE = "https://aniverse-api-jnyh.onrender.com";
 const streamSection = document.querySelector("#watch");
 const localLayout = streamSection?.querySelector(".watch-layout");
 
