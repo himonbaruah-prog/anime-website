@@ -573,3 +573,133 @@ saveList();
 loadAnime("");
 loadUpcoming();
 loadNewReleases();
+
+
+// Local video library: files stay on this device/browser (IndexedDB).
+const VIDEO_DB = "aniverse-local-videos";
+const VIDEO_STORE = "episodes";
+let localVideos = [];
+let activeVideoUrl = "";
+
+function openVideoDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(VIDEO_DB, 1);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(VIDEO_STORE)) {
+        db.createObjectStore(VIDEO_STORE, { keyPath: "id" });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getVideoStore(mode, action) {
+  const db = await openVideoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(VIDEO_STORE, mode);
+    const request = action(tx.objectStore(VIDEO_STORE));
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+    tx.oncomplete = () => db.close();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function refreshVideoLibrary() {
+  try {
+    localVideos = await getVideoStore("readonly", store => store.getAll()) || [];
+    renderVideoLibrary();
+  } catch (error) {
+    $("#video-library").innerHTML = '<p class="library-empty">This browser could not open local video storage.</p>';
+    console.error(error);
+  }
+}
+
+function renderVideoLibrary() {
+  const library = $("#video-library");
+  $("#video-count").textContent = localVideos.length + (localVideos.length === 1 ? " VIDEO" : " VIDEOS");
+  if (!localVideos.length) {
+    library.innerHTML = '<p class="library-empty">No videos added yet. Choose a video file to build your library.</p>';
+    return;
+  }
+  library.innerHTML = localVideos.map(video => `
+    <article class="video-library-item">
+      <div class="video-file-icon">▶</div>
+      <div class="video-file-info"><strong>${escapeHTML(video.name)}</strong><small>${(video.size / (1024 * 1024)).toFixed(1)} MB · Added on this device</small></div>
+      <button type="button" class="play-local" data-play-video="${escapeHTML(video.id)}">Play</button>
+      <button type="button" class="delete-local" data-delete-video="${escapeHTML(video.id)}" aria-label="Delete video">×</button>
+    </article>
+  `).join("");
+}
+
+async function playLocalVideo(id) {
+  const video = localVideos.find(item => item.id === id);
+  if (!video) return;
+  if (activeVideoUrl) URL.revokeObjectURL(activeVideoUrl);
+  activeVideoUrl = URL.createObjectURL(video.file);
+  const player = $("#local-player");
+  player.src = activeVideoUrl;
+  $("#player-title").textContent = video.name;
+  $("#player-subtitle").textContent = "Playing a video stored on this device";
+  $("#remove-video").hidden = false;
+  player.load();
+  player.play().catch(() => {});
+  $("#watch").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+$("#video-upload").addEventListener("change", async event => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("video/")) {
+    alert("Please choose a valid video file.");
+    event.target.value = "";
+    return;
+  }
+  try {
+    const item = { id: "video-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8), name: file.name, size: file.size, type: file.type, addedAt: Date.now(), file };
+    await getVideoStore("readwrite", store => store.put(item));
+    await refreshVideoLibrary();
+    await playLocalVideo(item.id);
+  } catch (error) {
+    alert("Could not save this video. Your browser storage may be full or unavailable.");
+    console.error(error);
+  }
+  event.target.value = "";
+});
+
+$("#video-library").addEventListener("click", async event => {
+  const play = event.target.closest("[data-play-video]");
+  const remove = event.target.closest("[data-delete-video]");
+  if (play) await playLocalVideo(play.dataset.playVideo);
+  if (remove) {
+    const id = remove.dataset.deleteVideo;
+    await getVideoStore("readwrite", store => store.delete(id));
+    if (localVideos.some(item => item.id === id) && $("#player-title").textContent === localVideos.find(item => item.id === id)?.name) {
+      $("#local-player").pause();
+      $("#local-player").removeAttribute("src");
+      $("#local-player").load();
+      if (activeVideoUrl) URL.revokeObjectURL(activeVideoUrl);
+      activeVideoUrl = "";
+      $("#player-title").textContent = "Choose an episode to start watching";
+      $("#player-subtitle").textContent = "Your uploaded videos stay in this browser on this device.";
+      $("#remove-video").hidden = true;
+    }
+    await refreshVideoLibrary();
+  }
+});
+
+$("#remove-video").addEventListener("click", () => {
+  $("#local-player").pause();
+  $("#local-player").removeAttribute("src");
+  $("#local-player").load();
+  if (activeVideoUrl) URL.revokeObjectURL(activeVideoUrl);
+  activeVideoUrl = "";
+  $("#player-title").textContent = "Choose an episode to start watching";
+  $("#player-subtitle").textContent = "Your uploaded videos stay in this browser on this device.";
+  $("#remove-video").hidden = true;
+});
+
+$("#browse-legal").href = "https://www.justwatch.com/in";
+refreshVideoLibrary();
